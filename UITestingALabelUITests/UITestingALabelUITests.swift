@@ -1,19 +1,14 @@
-//
-//  UITestingALabelUITests.swift
-//  UITestingALabelUITests
-//
-//  Created by John Regner on 9/16/15.
-//  Copyright © 2015 johnregner. All rights reserved.
-//
-
 import XCTest
 
 class UITestingALabelUITests: XCTestCase {
+
+    var app: XCUIApplication!
         
     override func setUp() {
         super.setUp()
         
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        app = XCUIApplication()
         
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
@@ -21,16 +16,33 @@ class UITestingALabelUITests: XCTestCase {
         XCUIApplication().launch()
 
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        XCUIDevice.sharedDevice().orientation = .Portrait
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+
+    func testAllUIComponentsAreShownAtLaunch(){
+        XCTAssert(app.staticTexts["Label"].exists)
+        XCTAssert(app.buttons["Yes"].exists)
+        XCTAssert(app.buttons["No"].exists)
     }
     
+    func testLabelIsUpdatedWhenYesNoButtonsArePressed() {
+        //to ensure that a label appears on the screen Query for the text that you expect
+        //and assert that it exists.
+        XCTAssert(app.staticTexts["Label"].exists)
+
+        //You may also want to assert that only one label is currently on screen
+        XCTAssert(app.staticTexts.count == 1)
+
+        app.buttons["No"].tap()
+        XCTAssert(app.staticTexts["No"].exists)
+
+        app.buttons["Yes"].tap()
+        XCTAssert(app.staticTexts["Yes"].exists)
+
+    }
 }
